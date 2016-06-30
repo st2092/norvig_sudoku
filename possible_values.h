@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 
+static const int MAX_POSSIBLE_VALUES = 9;
+
 class PossibleValues
 {
 private:
