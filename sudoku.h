@@ -11,7 +11,7 @@ private:
     std::vector<PossibleValues> cells;
     bool removeValueAtCell(int cell_number, int value);
     static std::vector< std::vector<int> > group;
-    static std::vector< std::vector<int> > unit;        // collection of 9 cells is 1 unit
+    static std::vector< std::vector<int> > units;        // collection of 9 cells is 1 unit
     static std::vector< std::vector<int> > neighbors;   // cells that share the same group
 
 public:
