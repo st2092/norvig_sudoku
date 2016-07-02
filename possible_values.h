@@ -2,6 +2,7 @@
 #define _POSSIBLE_VALUES_H_
 
 #include <vector>
+#include <string>
 #include <algorithm>
 
 static const int MAX_POSSIBLE_VALUES = 9;
@@ -17,7 +18,7 @@ public:
     int    count() const;
     void   removeValue(const int & value);
     int    getCorrectValue() const;
-    string toString(const int & width) const;
+    std::string toString(const int & width) const;
 };
 
 #endif

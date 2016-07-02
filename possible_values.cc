@@ -60,16 +60,16 @@ PossibleValues::getCorrectValue() const
  * function: toString
  * Converts the possible value set into a string representation.
  */
-string
-PossibleValue::toString(const int & width) const
+std::string
+PossibleValues::toString(const int & width) const
 {
-    string possible_Values_str(width, ' ');
+    std::string possible_values_str(width, ' ');
 
     for (int i = 0; i < MAX_POSSIBLE_VALUES; i++)
     {
        if (isAvailableValue(i))
        {
-            possible_values_str[i] = '0' + i;
+           possible_values_str[i] = '0' + i;
        } 
     }
 

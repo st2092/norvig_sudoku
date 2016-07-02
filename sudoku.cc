@@ -1,11 +1,16 @@
 #include "sudoku.h"
+#include <iostream>
+
+std::vector< std::vector<int> > Sudoku::group(27);
+std::vector< std::vector<int> > Sudoku::neighbors(81);
+std::vector< std::vector<int> > Sudoku::units(81);
 
 /**
  * Constructor
  * This constructor takes in a string representation of a sudoku puzzle. The string gets use for
  * creating a 9x9 cell representation.
  */
-Sudoku::Sudoku(string original_sudoku_puzzle)
+Sudoku::Sudoku(std::string original_sudoku_puzzle)
 : cells(81)
 {
     int cell_number = 0;
@@ -30,11 +35,11 @@ Sudoku::Sudoku(string original_sudoku_puzzle)
 void
 Sudoku::init()
 {
-    group(27);
-    units(81);
-    neighbors(81);
+    //std::vector< std::vector<int> > Sudoku::group(27);
+    //units(81);
+    //neighbors(81);
 
-    for (int i = 0; i < MAX_POSSIBLE_VALUE; i++)
+    for (int i = 0; i < MAX_POSSIBLE_VALUES; i++)
     {
         for (int j = 0; j < MAX_POSSIBLE_VALUES; j++)
         {
@@ -52,7 +57,7 @@ Sudoku::init()
     {
         for (int x = 0; x < units[k].size(); x++)
         {
-            for (int j = 0; j < MAX_POSSIBLE_VALUE; j++)
+            for (int j = 0; j < MAX_POSSIBLE_VALUES; j++)
             {
                 int k2 = group[units[k][x]][j];
                 if (k2 != k)
@@ -62,6 +67,16 @@ Sudoku::init()
             }
         }
     }
+}
+
+/**
+ * function: getPossibleValuesAtCell
+ * Returns the set of possible values a specific cell can be.
+ */
+PossibleValues
+Sudoku::getPossibleValuesAtCell(int cell_number)
+{
+    return cells[cell_number];
 }
 
 /**
@@ -95,7 +110,7 @@ Sudoku::removeValueAtCell(int cell_number, int value)
             // for all neighbors of cell remove the correct value as a possibility
             for (int i = 0; i < neighbors[cell_number].size(); i++)
             {
-                if (!removeValueAtCell([cell_numbe][i], correct_cell_value))
+                if (!removeValueAtCell(neighbors[cell_number][i], correct_cell_value))
                 {
                     return false;
                 }
@@ -133,4 +148,98 @@ Sudoku::removeValueAtCell(int cell_number, int value)
     }
 }
 
+/**
+ * function: isSovled
+ * Determines if the sudoku puzzle is solved.
+ * @return bool         true if complete; false otherwise
+ */
+bool
+Sudoku::isSolved() const
+{
+    for (int i = 0; i < cells.size(); i++)
+    {
+        if (cells[i].count() != 1)
+        {
+            return false;
+        }
+    }
 
+    return true;
+}
+
+/**
+ * function: assignValueToCell
+ * Assign a value to a cell and remove all other values from the cell's possible value set.
+ * This method is use only when it is certain the cell should be a certain value.
+ */
+bool
+Sudoku::assignValueToCell(int cell_number, int value)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        if (i != value)
+        {
+            if (!removeValueAtCell(cell_number, value))
+            {
+                // failed to remove a value from set
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
+ * function: findCellWithLeastPossibleValues
+ * Traverse though all cells and returns the last found cell index with the least possible
+ * values.
+ */
+int
+Sudoku::findCellWithLeastPossibleValues() const
+{
+    int minimum_possible_values = 0;
+    int cell_with_lowest_possible_values = -1;
+
+    int current_cell_min_possible_values = 0;
+    for (int i = 0; i < cells.size(); i++)
+    {
+        current_cell_min_possible_values = cells[i].count();
+
+        if (current_cell_min_possible_values > 1 && (current_cell_min_possible_values < minimum_possible_values || cell_with_lowest_possible_values == -1))
+        {
+            minimum_possible_values = current_cell_min_possible_values;
+            cell_with_lowest_possible_values = i;
+        }
+    }
+
+    return cell_with_lowest_possible_values;
+}
+
+void
+Sudoku::printCells(std::ostream & output_stream) const
+{
+    int width = 1;
+    for (int i = 0; i < cells.size(); i++)
+    {
+        width = std::max(width, 1 + cells[i].count());
+    }
+
+    const std::string separator(3 * width, '-');
+    for (int i = 0; i < MAX_POSSIBLE_VALUES; i++)
+    {
+        if (i == 3 || i == 6)
+        {
+            output_stream << "+-" << separator << "+" << separator << std::endl;
+        }
+        
+        for (int j = 0; j < MAX_POSSIBLE_VALUES; j++)
+        {
+            if (j == 3 || j == 6)
+            {
+                output_stream << cells[i*9 + j].toString(width);
+            }
+        }
+        output_stream << std::endl;
+    }
+}
