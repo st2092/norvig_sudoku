@@ -1,4 +1,4 @@
-#Sudoku Solver#
+#Sudoku Solver
 
 A sudoku solver based on constraint propagation and searching.
 
