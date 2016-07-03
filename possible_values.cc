@@ -39,7 +39,7 @@ PossibleValues::count() const
 void
 PossibleValues::removeValue(const int & value)
 {
-    values_to_choose[value - 1];
+    values_to_choose[value - 1] = false;
 }
 
 /**
@@ -64,12 +64,13 @@ std::string
 PossibleValues::toString(const int & width) const
 {
     std::string possible_values_str(width, ' ');
-
-    for (int i = 0; i < MAX_POSSIBLE_VALUES; i++)
+	int str_index = 0;
+    for (int i = 1; i <= MAX_POSSIBLE_VALUES; i++)
     {
        if (isAvailableValue(i))
        {
-           possible_values_str[i] = '0' + i;
+           possible_values_str[str_index] = '0' + i;
+		   str_index++;
        } 
     }
 

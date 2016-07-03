@@ -1,8 +1,6 @@
+#include "sudoku.h"
 #include <memory>
 #include <iostream>
-//#include "/usr/include/memory.h"
-#include "possible_values.h"
-#include "sudoku.h"
 
 /**
  * function: solve
@@ -13,7 +11,7 @@
 std::unique_ptr<Sudoku>
 solve(std::unique_ptr<Sudoku> sudoku_puzzle)
 {
-    if (sudoku_puzzle == nullptr || S->isSolved())
+    if (sudoku_puzzle == nullptr || sudoku_puzzle->isSolved())
     {
         return sudoku_puzzle;
     }
@@ -25,10 +23,10 @@ solve(std::unique_ptr<Sudoku> sudoku_puzzle)
         if (possible_values_set.isAvailableValue(i))
         {
             std::unique_ptr<Sudoku> new_sudoku_puzzle(new Sudoku(*sudoku_puzzle));
-            if (new_sudoku_puzzle->assignValueToCell(lowest_count_cell))
+            if (new_sudoku_puzzle->assignValueToCell(lowest_count_cell, i))
             {
                 // assigning value to cell successful; switch ownership to updated puzzle and try to solve again
-                if (auto new_sudoku_puzzle_updated = solve(std::move(new_sudoku_puzzle))
+                if (auto new_sudoku_puzzle_updated = solve(std::move(new_sudoku_puzzle)))
                 {
                     return new_sudoku_puzzle_updated;
                 }
@@ -47,7 +45,8 @@ int main(int argc, char** argv)
     {
         if (auto solved_sudoku_puzzle = solve(std::unique_ptr<Sudoku>(new Sudoku(sudoku_puzzle_input))))
         {
-            solved_sudoku_puzzle->printCells();
+            std::cout << "Solution:" << std::endl;
+            solved_sudoku_puzzle->printCells(std::cout);
         }
         else
         {

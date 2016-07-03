@@ -4,8 +4,8 @@ OUT = sudoku_solver
 
 # compile components:
 CXX = g++
-FLAGS = -W -Wall -pedantic -ansi -Wextra -std=c++0x
-CXXFLAG = -g $(FLAGS)
+FLAGS = -pedantic -std=c++0x
+CXXFLAGS = -g $(FLAGS)
 COMPFLAGS = -c $(FLAGS)
 
 # basic compile commands:

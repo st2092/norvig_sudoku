@@ -13,6 +13,7 @@ std::vector< std::vector<int> > Sudoku::units(81);
 Sudoku::Sudoku(std::string original_sudoku_puzzle)
 : cells(81)
 {
+    std::cout << "Input:\n" << original_sudoku_puzzle << std::endl;
     int cell_number = 0;
     for (int i = 0; i < cells.size(); i++)
     {
@@ -35,10 +36,6 @@ Sudoku::Sudoku(std::string original_sudoku_puzzle)
 void
 Sudoku::init()
 {
-    //std::vector< std::vector<int> > Sudoku::group(27);
-    //units(81);
-    //neighbors(81);
-
     for (int i = 0; i < MAX_POSSIBLE_VALUES; i++)
     {
         for (int j = 0; j < MAX_POSSIBLE_VALUES; j++)
@@ -74,7 +71,7 @@ Sudoku::init()
  * Returns the set of possible values a specific cell can be.
  */
 PossibleValues
-Sudoku::getPossibleValuesAtCell(int cell_number)
+Sudoku::getPossibleValuesAtCell(int cell_number) const
 {
     return cells[cell_number];
 }
@@ -98,7 +95,7 @@ Sudoku::removeValueAtCell(int cell_number, int value)
         cells[cell_number].removeValue(value);
 
         int possible_values_count = cells[cell_number].count();
-        if (possible_values_count <= 0)
+        if (possible_values_count == 0)
         {
             return false;
         }
@@ -146,6 +143,8 @@ Sudoku::removeValueAtCell(int cell_number, int value)
             }
         }
     }
+
+    return true;
 }
 
 /**
@@ -175,11 +174,11 @@ Sudoku::isSolved() const
 bool
 Sudoku::assignValueToCell(int cell_number, int value)
 {
-    for (int i = 0; i < 9; i++)
+    for (int i = 1; i <= 9; i++)
     {
         if (i != value)
         {
-            if (!removeValueAtCell(cell_number, value))
+            if (!removeValueAtCell(cell_number, i))
             {
                 // failed to remove a value from set
                 return false;
@@ -230,15 +229,16 @@ Sudoku::printCells(std::ostream & output_stream) const
     {
         if (i == 3 || i == 6)
         {
-            output_stream << "+-" << separator << "+" << separator << std::endl;
+            output_stream << separator << "+-" << separator << "+" << separator << std::endl;
         }
         
         for (int j = 0; j < MAX_POSSIBLE_VALUES; j++)
         {
             if (j == 3 || j == 6)
             {
-                output_stream << cells[i*9 + j].toString(width);
+               output_stream << "| "; 
             }
+	    output_stream << cells[i*9 + j].toString(width);
         }
         output_stream << std::endl;
     }
