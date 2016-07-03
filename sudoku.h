@@ -16,7 +16,7 @@ private:
 
 public:
     Sudoku(std::string original_sudoku_puzzle);
-    void init();
+    static void init();
     PossibleValues getPossibleValuesAtCell(int cell_number);
     bool isSolved() const;
     bool assignValueToCell(int cell_number, int value);
